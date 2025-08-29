@@ -272,7 +272,7 @@ router.get('/search-result', async (req, res) => {
       })
         .sort({ createdAt: -1 })
         .limit(20)
-        .select('name phone image wcode createdAt prizeAmount address status');
+        .select('name phone image wcode createdAt prizeAmount address status paid product');
 
       // Mask phone numbers for privacy
       winners = winners.map(winner => ({
@@ -416,6 +416,7 @@ router.get('/winner-details/:wcode', async (req, res) => {
         prizeAmount: winner.prizeAmount,
         product: winner.product,
         date: winner.date,
+        paid: winner.paid,
         image: winner.image
       }
     });
@@ -526,7 +527,7 @@ router.get('/search-winners', async (req, res) => {
     const winners = await Winner.find(searchQuery)
       .sort({ createdAt: -1 })
       .limit(50)
-      .select('name phone wcode prizeAmount product date image createdAt');
+      .select('name phone wcode prizeAmount product date image createdAt paid');
 
     // Mask phone numbers for privacy
     const maskedWinners = winners.map(winner => ({
