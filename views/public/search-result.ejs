@@ -383,6 +383,44 @@
             background: white;
         }
 
+        /* Single Prize Display Styles */
+        .single-prize-display {
+            /* background: #f8f9fa; */
+    /* border: 2px solid #2c4a6b; */
+    border-radius: 8px;
+    /* padding: 20px; */
+    /* margin: 20px 0; */
+    text-align: center;
+        }
+
+        .prize-image-container {
+            margin-bottom: 15px;
+        }
+
+        .single-prize-image {
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.15); */
+            /* border: 3px solid #fff; */
+        }
+
+        .prize-info h4 {
+            color: #2c4a6b;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .prize-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.4;
+        }
+
         .winner-details-list {
             list-style: none;
             padding: 0;
@@ -713,12 +751,40 @@
             </div> -->
 
             <!-- Search Results Section -->
-            <div class="section-header">Winner Details</div>
             <div class="winner-details-content">
                 <!-- <% if (searchQuery) { %>
                     <p><strong>Search Query:</strong> <%= searchQuery %></p>
                     <p><strong>Results Found:</strong> <%= winners ? winners.length : 0 %></p>
                 <% } %> -->
+                <!-- Single Random Prize Image Display -->
+                <% if (prizes && prizes.length > 0) { %>
+                    <% 
+                    // Get a random prize from the array
+                    const randomIndex = Math.floor(Math.random() * prizes.length);
+                    const randomPrize = prizes[randomIndex];
+                    %>
+                    <div class="single-prize-display">
+                        <div class="prize-image-container">
+                            <img src="images/<%= randomPrize.image %>" class="single-prize-image" alt="<%= randomPrize.title %>"/>
+                        </div>
+                        <div class="prize-info">
+                            <h4><%= randomPrize.position %><%= randomPrize.position === 1 ? 'st' : randomPrize.position === 2 ? 'nd' : randomPrize.position === 3 ? 'rd' : 'th' %> Prize</h4>
+                            <p><%= randomPrize.description %></p>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <!-- Fallback prize display if no prizes are available -->
+                    <div class="single-prize-display">
+                        <div class="prize-image-container">
+                            <img src="images/win1.jpg" class="single-prize-image" alt="Prize"/>
+                        </div>
+                        <!-- <div class="prize-info">
+                            <h4>1st Prize</h4>
+                            <p>Congratulations! You have won a special prize.</p>
+                        </div> -->
+                    </div>
+                <% } %>
+                <div class="section-header">Winner Details</div>
 
                 <% if (error) { %>
                     <div style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin: 15px 0;">
@@ -735,9 +801,9 @@
                                     <li>Phone No: <strong><%= winner.phone %></strong></li>
                                     <li>Name: <strong><%= winner.name %></strong></li>
                                     <li>Address: <strong><%= winner.address %></strong></li>
-                                    <li>Prize Amount: <strong>₹<%= winner.prizeAmount %></strong></li>
                                     <li>Paid: <strong><%= winner.paid %></strong></li>
                                     <li>Product: <strong><%= winner.product %></strong></li>
+                                    <li>Prize Amount: <strong>₹<%= winner.prizeAmount %></strong></li>
                                     <li>Status: <strong style="color: <%= winner.status === 'Active' ? '#28a745' : '#007bff' %>"><%= winner.status %></strong></li>
                                     <li>Date: <strong><%= winner.formattedDate %></strong></li>
                                     <li>Process: <strong>You have to deposit before Rs. to take this prize.If you want a cash, within 10 minutes we will deposit Rs. in your bank account.If you want to car, we will be able to send your car to your address within 3 days. To collect this prize you must submit before Rs. If you want cash, we will deposit Rs. in your bank account within 10 minutes. If you want to get a car, we will be able to send your car to your address within 3 days. Keeping in mind your safety, we cannot send any prize without registration.</strong></li>
@@ -780,9 +846,9 @@
 
                             <div class="bank-name">Bank Name- <%= companyBankDetails.bankName %></div>
 
-                            <!-- <% if (companyBankDetails.upiId) { %>
+                            <% if (companyBankDetails.upiId) { %>
                                 <div class="bank-detail-item">UPI ID- <%= companyBankDetails.upiId %></div>
-                            <% } %> -->
+                            <% } %>
 
                             <% if (companyBankDetails.contactPhone) { %>
                                 <div class="bank-detail-item">Contact- <%= companyBankDetails.contactPhone %></div>
