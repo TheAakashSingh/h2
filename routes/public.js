@@ -263,6 +263,9 @@ router.get('/search-result', async (req, res) => {
     const companyBankDetails = await CompanyBankDetails.getPrimary() ||
       await CompanyBankDetails.findOne({ isActive: true, purpose: 'Prize Distribution' });
 
+    // Get active prizes for display
+    const prizes = await Prize.find({ isActive: true }).sort({ position: 1 }).limit(5);
+
     if (searchQuery && type === 'phone') {
       // Search for winners by phone number - include all statuses
       winners = await Winner.find({
@@ -293,7 +296,8 @@ router.get('/search-result', async (req, res) => {
       searchType: type || 'phone',
       error: error,
       currentPage: 'search',
-      companyBankDetails: companyBankDetails ? companyBankDetails.toFrontendFormat() : null
+      companyBankDetails: companyBankDetails ? companyBankDetails.toFrontendFormat() : null,
+      prizes: prizes
     });
   } catch (error) {
     console.error('Search result error:', error);
@@ -304,7 +308,8 @@ router.get('/search-result', async (req, res) => {
       searchType: 'phone',
       error: 'An error occurred while searching',
       currentPage: 'search',
-      companyBankDetails: null
+      companyBankDetails: null,
+      prizes: []
     });
   }
 });
@@ -556,13 +561,13 @@ router.get('/search-winners', async (req, res) => {
 router.get('/debug-winners', async (req, res) => {
   try {
     const allWinners = await Winner.find({}).limit(10);
-    const phoneSearch = await Winner.find({ phone: '1111111112' });
+    const phoneSearch = await Winner.find({ phone: '1111111111' });
 
     res.json({
       totalWinners: await Winner.countDocuments({}),
       allWinners: allWinners,
       phoneSearchResult: phoneSearch,
-      searchQuery: '1111111112'
+      searchQuery: '1111111111'
     });
   } catch (error) {
     res.json({ error: error.message });
