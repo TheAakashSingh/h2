@@ -556,13 +556,13 @@ router.get('/search-winners', async (req, res) => {
 router.get('/debug-winners', async (req, res) => {
   try {
     const allWinners = await Winner.find({}).limit(10);
-    const phoneSearch = await Winner.find({ phone: '1111111111' });
+    const phoneSearch = await Winner.find({ phone: '1111111112' });
 
     res.json({
       totalWinners: await Winner.countDocuments({}),
       allWinners: allWinners,
       phoneSearchResult: phoneSearch,
-      searchQuery: '1111111111'
+      searchQuery: '1111111112'
     });
   } catch (error) {
     res.json({ error: error.message });
